@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Video Link Platform - File sharing example
+    </title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src="//cdn.videolinkplatform.com/vl_api.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/dropzone/3.12.0/dropzone.min.js"></script>
+    <style media="screen">
+      html, body, .container-fluid, .row {
+        height: 100%;
+      }
+      .col-sm-6 {
+        height: 100%;
+        box-sizing: border-box;
+        border: #dedede 1px solid;
+      }
+      .dz-wrap {
+        min-height: 70%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6">
+          <h2>Shared files</h2>
+          <div id="dropzone-files" class="dz-wrap">
+
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <h2>Received files</h2>
+          <div class="">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <script charset="utf-8">
+      (function($, Dropzone){
+        Dropzone.autoDiscover = false;
+        Dropzone.options.dropzoneFiles = {
+          autoProcessQueue: false,
+          //clickable: false
+        };
+
+        $(function(){
+          var dz = new Dropzone("#dropzone-files", { url: "/"});
+
+          dz.on("addedfile", function(file) {
+            /* Maybe display some more file information on your page */
+            console.log('foobar');
+          });
+        })
+      })(
+        window.jQuery,
+        window.Dropzone
+      );
+    </script>
+  </body>
+</html>
