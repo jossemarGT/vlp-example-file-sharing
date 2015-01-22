@@ -38,10 +38,26 @@
         font-size: 3em;
         color: #cecece;
       }
+
+      .container-fluid.not-initialized:before {
+        content: 'Standby...';
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        text-align: center;
+        font-size: 5em;
+        background-color: rgba(0,0,0,0.6);
+        color: #fff;
+        padding-top: 30vh;
+        padding-top: 30%;
+      }
     </style>
   </head>
   <body>
-    <div class="container-fluid">
+    <div class="container-fluid not-initialized">
       <div class="row">
         <div class="col-sm-6">
           <h2>Sent files</h2>
@@ -73,6 +89,14 @@
             }
           }
 
+          function addDownloadedFile(fileId, name, fileData, type, mime) {
+            $('#transmited-files').append('<a target="_blank" href="'+fileData+'" class="file-thumbnail col-sm-3"><i class="glyphicon glyphicon-file"></i> Open '+name+'</a>');
+          }
+
+          function removeInitScreen(){
+            $('.container-fluid').removeClass('not-initialized');
+          }
+
           if(isWebRTC){
             var vlpConnector = new VideolinkPlatformConnector({
               apiKey: 'a4d33c1d9ae6337b7eefd2d0b1bfdb05',
@@ -83,6 +107,7 @@
                 vlpRoom = room;
 
                 var fileSharingService = vlpRoom.getFileSharingService();
+                removeInitScreen();
 
                 fileSharingService.onFileRequest(function(fileTransferId, name) {
                   if (confirm('Would you like to download file: ' + name)) {
@@ -90,22 +115,19 @@
                   }
                 });
                 fileSharingService.onDownloadCompleted(function(fileId, name, fileData, type, mime) {
-                  $('#transmited-files').append('<a target="_blank" href="'+fileData+'" class="file-thumbnail col-sm-3"><i class="glyphicon glyphicon-file"></i> Open '+name+'</a>');
+                  addDownloadedFile(fileId, name, fileData, type, mime);
                 });
 
               }).on('onRemoteParticipantConnected', function() {
                 /**
                 * This event is fired each time that a user connects to this room.
                 */
-              }).on('onEmpty', function() {
-                /**
-                * This event is fired when all the users left)
-                */
-
               });
             }, function(error){
               console.log(error);
             })
+          } else {
+
           }
 
           /*********************************************************************
