@@ -16,7 +16,7 @@
         box-sizing: border-box;
         border: #dedede 1px solid;
       }
-      #dropzone-files {
+      #dropzone-files, #transmited-files {
         min-height: 85%;
         position: relative;
         text-align: center;
@@ -31,7 +31,7 @@
       }
       .file-thumbnail {
         word-wrap: break-word;
-        box-shadow: #dedede 0 0 5px;
+        box-shadow: #dedede 0 0 2px inset;
         padding: 15px;
       }
       .file-thumbnail .glyphicon-file {
@@ -64,8 +64,48 @@
           /*********************************************************************
            * VideoLinkPlatform SDK
            ********************************************************************/
+          var vlpRoom;
+
           function sendP2PFile (file) {
-            // Let's rock!
+            if (!!vlpRoom){
+              var fileSharingService = vlpRoom.getFileSharingService();
+              fileSharingService.startFileSharing(file);
+            }
+          }
+
+          if(isWebRTC){
+            var vlpConnector = new VideolinkPlatformConnector({
+              apiKey: 'a4d33c1d9ae6337b7eefd2d0b1bfdb05',
+              connectionType: 'chat-only'
+            }, function(connector){
+              var roomName = 'file-share';
+              connector.createRoom({name: roomName}, function(room){
+                vlpRoom = room;
+
+                var fileSharingService = vlpRoom.getFileSharingService();
+
+                fileSharingService.onFileRequest(function(fileTransferId, name) {
+                  if (confirm('Would you like to download file: ' + name)) {
+                    fileSharingService.acceptFileSharingRequest(fileTransferId);
+                  }
+                });
+                fileSharingService.onDownloadCompleted(function(fileId, name, fileData, type, mime) {
+                  $('#transmited-files').append('<a target="_blank" href="'+fileData+'" class="file-thumbnail col-sm-3"><i class="glyphicon glyphicon-file"></i> Open '+name+'</a>');
+                });
+
+              }).on('onRemoteParticipantConnected', function() {
+                /**
+                * This event is fired each time that a user connects to this room.
+                */
+              }).on('onEmpty', function() {
+                /**
+                * This event is fired when all the users left)
+                */
+
+              });
+            }, function(error){
+              console.log(error);
+            })
           }
 
           /*********************************************************************
