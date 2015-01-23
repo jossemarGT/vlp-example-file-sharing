@@ -3,12 +3,12 @@
 With VideoLinkPlatform SDK is easy to share files in a peer-to-peer connection and
 this example shows you how.
 
-1. First make sure to have VideoLinkPlatform JS SDK
+First make sure to have VideoLinkPlatform JS SDK
 ```html
 <script src="//cdn.videolinkplatform.com/vl_api.js"></script>
 ```
 
-2. Then you need to initialize the vlp Connector object with your API key and
+Then you need to initialize the vlp Connector object with your API key and
 the desired connection type, you can read more about VideolinkPlatformConnector
 in the [documentation](http://videolinkplatform.com/apidocs.html#VideolinkPlatformConnector)
 ```js
@@ -18,7 +18,7 @@ var vlpConnector = new VideolinkPlatformConnector({
 }, function success(connector){...}, function failure(error){...})
 ```
 
-3. VideolinkPlatformConnector constructor takes a success callback as argument
+VideolinkPlatformConnector constructor takes a success callback as argument
 which give us access to the initialized connector, you can use it to configure
 the room.
 ```js
@@ -28,13 +28,13 @@ connector.createRoom({name: roomName}, function(room){
   ...
 ```
 
-4. Every room has its own FileSharingService, you need to retrieve it in order to
+Every room has its own FileSharingService, you need to retrieve it in order to
 configure our filehandling events.
 ```js
   var fileSharingService = vlpRoom.getFileSharingService();
 ```
 
-5. There are plenty number of events in the file sharing process (as you can see
+There are plenty number of events in the file sharing process (as you can see
 [here](http://videolinkplatform.com/file-sharing.html#Events)), but for this
 example we just need to handle `onFileRequest` and `onDownloadCompleted`.
 ```js  
@@ -49,7 +49,7 @@ example we just need to handle `onFileRequest` and `onDownloadCompleted`.
   });
 ```
 
-6. Now we have configured the room and the file sharing events, but we can't send
+Now we have configured the room and the file sharing events, but we can't send
 files yet, that's why we need `fileSharingService.startFileSharing(file)` as you
 can see here.
 ```js
